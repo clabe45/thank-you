@@ -19,7 +19,7 @@ class Virus:
             input("IMPORTANT: MAKE SURE THE EXECUTABLE IS LOCATED IN A DEDICATED DIRECTORY. "
                 + "ALL FILE MODIFICATIONS WILL BE DONE IN THAT DIRECTORY.\n"
                 + "(Other than that, no modifications will be done to your system.)\n"
-                + "[Press Ctrl-C to exit]")
+                + "[Press Ctrl-C to exit / Enter to continue]\n")
         except KeyboardInterrupt:
             print() # newline
             sys.exit(0)
@@ -27,7 +27,8 @@ class Virus:
         self.name = name
         self.file_man = file.FileManager(home, main_file_base)    # file manager
         self.text_gen = nlg.TextGenerator(self.file_man)
-        self.severity = self.file_man.get_severity()
+        # multiply by ten if they delete the original file
+        self.severity = self.file_man.get_int('severity.txt', 10 * 100)
         # (static) Virus.actions was set by ai decorators; now apply them to instance so they can be used
         self.actions = {getattr(self, action.__name__): likelihood for action,likelihood in Virus.actions.items()}
 
@@ -92,5 +93,9 @@ class Virus:
             print("Hi, my name's %s! What's yours?" % self.name)
 
             username = input('>>> ')
+            while not username:
+                print("Really?? You don't have a name?")
+                username = input('>>>> ')
+
             for _ in range(times):
                 print("Hi, %s. My name's %s!" % (username, self.name))

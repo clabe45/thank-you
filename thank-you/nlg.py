@@ -7,8 +7,7 @@ class TextGenerator:
     def __init__(self, file_man):
         self.file_man = file_man
 
-        with open(file_man.join('data', 'sample.txt'), 'r') as file:
-            self.model = markovify.Text(file.read())
+        self.model = markovify.Text(file_man.get_str('sample_text.txt', 'You broke me.'))
 
     def gen_message(self):
         """Generate note text"""
