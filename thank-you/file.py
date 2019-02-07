@@ -6,6 +6,8 @@ class FileManager():
     def __init__(self, home, main_file_base):
         self.home = home
         self.main_file_base = main_file_base
+        self.ext = 'py' if constants.TESTING else 'exe'
+        self.main_file_name = self.main_file_base + '.' + self.ext
 
     def join(self, *parts):
         return os.path.join(self.home, *parts)
@@ -22,7 +24,7 @@ class FileManager():
                 print("Hmm... it looks like something's missing. Lemme fix that real quick.")
             elif type(e) == ValueError:
                 print('Hmm... it looks like someone messed with the SEVERITY LEVEL!!. Who would DO THAT??')
-                
+
             with open(path, 'w+') as file:
                 file.write(str(constants.DEFAULT_SEVERITY))
             return constants.DEFAULT_SEVERITY

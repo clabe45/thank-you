@@ -21,9 +21,5 @@ if __name__ == '__main__':
     else:
         # do work
         for _ in range(random.randint(0, 5)):
-            r = random.randint(0, 3)
-            if r == 0:
-                for _ in range(0, random.randint(0, 20)): virus.copy()
-            elif r == 1:
-                virus.leave_note()
-            else: virus.say_hi()
+            fn = virus.get_random_action()
+            fn()
