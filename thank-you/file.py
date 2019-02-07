@@ -32,3 +32,9 @@ class FileManager():
     @staticmethod
     def get_file_index(name):
         return int(name[:-len('.py')].split('_')[1]) if '_' in name else 0
+
+    @staticmethod
+    def get_script_directory():
+        """Retrieve location of currently executed script"""
+
+        return os.path.dirname(os.path.abspath(__file__))

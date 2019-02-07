@@ -1,5 +1,6 @@
 import os
 import os.path
+import sys
 import re
 import random
 
@@ -8,11 +9,21 @@ import ai
 import nlg
 import file
 
+# what does the following line mean?
 # TODO: make other viruses from this virus
 
 @ai.agent
 class Virus:
-    def __init__(self, name, main_file_base, home='.'):
+    def __init__(self, name, main_file_base, home=file.FileManager.get_script_directory()):
+        try:
+            input("IMPORTANT: MAKE SURE THE EXECUTABLE IS LOCATED IN A DEDICATED DIRECTORY. "
+                + "ALL FILE MODIFICATIONS WILL BE DONE IN THAT DIRECTORY.\n"
+                + "(Other than that, no modifications will be done to your system.)\n"
+                + "[Press Ctrl-C to exit]")
+        except KeyboardInterrupt:
+            print() # newline
+            sys.exit(0)
+
         self.name = name
         self.file_man = file.FileManager(home, main_file_base)    # file manager
         self.text_gen = nlg.TextGenerator(self.file_man)
