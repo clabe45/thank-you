@@ -12,8 +12,25 @@ class FileManager():
     def join(self, *parts):
         return os.path.join(self.home, *parts)
 
-    def get_severity(self):
-        path = self.join('data', 'severity.txt')
+    def get_str(self, name, default_value=''):
+        path = self.join('data', name)
+        try:
+            with open(path, 'r') as file:
+                return file.read()
+
+        except (FileNotFoundError, ValueError) as e:
+            # error-specific messages
+            if type(e) == FileNotFoundError:
+                print("Hmm... it looks like something's missing. Lemme fix that real quick.")
+            elif type(e) == ValueError:
+                print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+
+            with open(path, 'w+') as file:
+                file.write(default_value)
+            return default_value
+
+    def get_int(self, name, default_value=0):
+        path = self.join('data', name)
         try:
             with open(path, 'r') as file:
                 return int(file.read())
@@ -23,11 +40,11 @@ class FileManager():
             if type(e) == FileNotFoundError:
                 print("Hmm... it looks like something's missing. Lemme fix that real quick.")
             elif type(e) == ValueError:
-                print('Hmm... it looks like someone messed with the SEVERITY LEVEL!!. Who would DO THAT??')
+                print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
 
             with open(path, 'w+') as file:
-                file.write(str(constants.DEFAULT_SEVERITY))
-            return constants.DEFAULT_SEVERITY
+                file.write(str(default_value))
+            return default_value
 
     @staticmethod
     def get_file_index(name):

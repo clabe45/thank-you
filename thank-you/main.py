@@ -15,11 +15,15 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         subcmd = sys.argv[1]
         if subcmd == 'clean':
-            print('Removed %d virus files. No need to thank me.' % virus.clean_directory())
+            print('Removed %d virus file(s). No need to thank me.' % virus.clean_directory())
         else:
             print('Unknown subcommand: \'%s\'' % subcmd)
     else:
         # do work
-        for _ in range(random.randint(0, 5)):
+        n = random.randint(0, 5) # number of "actions" performed
+        for _ in range(n):
             fn = virus.get_random_action()
             fn()
+
+        if n == 0:
+            print("Oops! Try again next time!")
