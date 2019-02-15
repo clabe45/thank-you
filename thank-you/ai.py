@@ -1,22 +1,17 @@
-curr_agent_actions = {}
+class Agent():
+    def __init__(self):
+        self.actions = {}
 
-def agent(cls):
-    global curr_agent_actions
+    def action(self, likelihood=1):
+        """Marks an action that the current agent can do
 
-    # apply agent actions to cls (because this function is executed after the `@action` calls)
-    cls.actions = curr_agent_actions
-    curr_agent_actions = {}
+        @param likelihood - Higher numbers mean more likely. Must be a whole number.
+        """
 
-    return cls
+        this = self
 
-def action(likelihood=1):
-    """Marks an action that the current agent can do
+        def func(fn):
+            this.actions[fn] = likelihood
 
-    @param likelihood - Higher numbers mean more likely. Must be a whole number.
-    """
-
-    def func(fn):
-        curr_agent_actions[fn] = likelihood
-
-        return fn
-    return func
+            return fn
+        return func
