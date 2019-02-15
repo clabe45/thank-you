@@ -6,11 +6,11 @@ Thank You is a self-contained and harmless mock-virus made to show gratitude to 
 
 ## Why
 
-You might want be amused to see what type of stuff it does. Think of it as a "coffee break" from your hours of laboring over the keyboard.
+You might be amused to see what type of stuff it does. Think of it as a "coffee break" from your works.
 
 ## Installation
 
-Head over to the [releases page](github.com/clabe45/thank-you/releases).
+Head over to the [releases page](https://github.com/clabe45/thank-you/releases).
 
 ## Usage
 
