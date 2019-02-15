@@ -6,7 +6,7 @@ Thank You is a self-contained and harmless mock-virus made to show gratitude to 
 
 ## Why
 
-You might be amused to see what type of stuff it does. Think of it as a "coffee break" from your works.
+You might be amused to see what type of stuff it does. Think of it as a "coffee break" from your work.
 
 ## Installation
 
