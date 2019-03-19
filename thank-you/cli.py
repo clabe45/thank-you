@@ -3,7 +3,7 @@ import sys
 
 import constants
 import virus
-import file
+import data
 
 def start():
     check_agreement()
@@ -30,7 +30,7 @@ def start():
             print("Oops! Try again next time!")
 
 def check_agreement():
-    if not file.get_bool('user_data', 'agreement.txt', False):
+    if not data.get_bool('user_data', 'agreement.txt', False):
         print('IMPORTANT: THE CONTENTS OF THE FOLDER CONTAINING %s WILL BE MODIFIED!\n' % constants.MAIN_FILE_NAME
             + "Set the contents of user_data/agreement.txt to 'true' (without the 's) to confirm this fact.")
         sys.exit(1)

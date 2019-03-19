@@ -1,37 +1,60 @@
-class DataManager():
-    def __init__(self, file_man):
-        self.file_man = file_man
+import file
 
-    def get_str(self, name, default_value=''):
-        path = self.file_man.join('data', name)
-        try:
-            with open(path, 'r') as file:
-                return file.read()
+# TODO: make the following get functions more DRY than WET
 
-        except (FileNotFoundError, ValueError) as e:
-            # error-specific messages
-            if type(e) == FileNotFoundError:
-                print("Hmm... it looks like something's missing. Lemme fix that real quick.")
-            elif type(e) == ValueError:
-                print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+def get_str(location, name, default_value=''):
+    path = file.join(location, name)
+    try:
+        with open(path, 'r') as f:
+            return f.read()
 
-            with open(path, 'w+') as file:
-                file.write(default_value)
-            return default_value
+    except (FileNotFoundError, ValueError) as e:
+        # error-specific messages
+        if type(e) == FileNotFoundError:
+            print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+        elif type(e) == ValueError:
+            print("Someone changed the data.. it's invalid")
 
-    def get_int(self, name, default_value=0):
-        path = self.file_man.join('data', name)
-        try:
-            with open(path, 'r') as file:
-                return int(file.read())
+        with open(path, 'w+') as f:
+            f.write(default_value)
+        return default_value
 
-        except (FileNotFoundError, ValueError) as e:
-            # error-specific messages
-            if type(e) == FileNotFoundError:
-                print("Hmm... it looks like something's missing. Lemme fix that real quick.")
-            elif type(e) == ValueError:
-                print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+def get_int(location, name, default_value=0):
+    path = file.join(location, name)
+    try:
+        with open(path, 'r') as f:
+            return int(f.read())
 
-            with open(path, 'w+') as file:
-                file.write(str(default_value))
-            return default_value
+    except (FileNotFoundError, ValueError) as e:
+        # error-specific messages
+        if type(e) == FileNotFoundError:
+            print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+        elif type(e) == ValueError:
+            print("Someone changed the data.. it's invalid")
+
+        with open(path, 'w+') as f:
+            f.write(str(default_value))
+        return default_value
+
+def get_bool(location, name, default_value=False):
+    path = file.join(location, name)
+    try:
+        with open(path, 'r') as f:
+            s = f.read().strip().lower()
+            if s == 'true':
+                return True
+            elif s == 'false':
+                return False
+            else:
+                raise ValueError('Not a boolean value (with manual conversion)')
+
+    except (FileNotFoundError, ValueError) as e:
+        # error-specific messages
+        if type(e) == FileNotFoundError:
+            print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+        elif type(e) == ValueError:
+            print("Someone changed the data.. it's invalid")
+
+        with open(path, 'w+') as f:
+            f.write(str(default_value))
+        return default_value

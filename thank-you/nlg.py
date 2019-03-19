@@ -4,9 +4,9 @@ import random
 import markovify
 
 import constants
-import file
+import data
 
-model = markovify.Text(file.get_str('data', 'sample_text.txt', 'You broke me.'))
+model = markovify.Text(data.get_str('data', 'sample_text.txt', 'You broke me.'))
 
 def gen_message():
     """Generate note text"""
