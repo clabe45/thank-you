@@ -21,7 +21,8 @@ def start():
             print("Invalid argument '%s'.. idk what you were thinking lol" % arg)
 
     else:
-        n = random.randint(0, 16) # number of "actions" performed
+        severity_factor = data.get_int('user_data', 'severity.txt') / constants.DEFAULT_SEVERITY
+        n = int(random.randrange(0, 16) * severity_factor) # number of "actions" performed
         for _ in range(n):
             fn = virus.get_random_action()
             fn()

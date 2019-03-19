@@ -79,7 +79,8 @@ def leave_note():
 @agent.action(likelihood=1)
 def say_hi(times=None):
     if times is None:
-        times = random.randint(1, 5)
+        # generate random int, scaled by severity
+        times = int(random.randrange(1, 5) * data.get_int('user_data', 'severity.txt') / constants.DEFAULT_SEVERITY)
 
     for _ in range(times):
         print("Hi, my name's %s! What's yours?" % constants.NAME)
