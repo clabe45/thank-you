@@ -2,22 +2,74 @@ import os.path
 
 import constants
 
-class FileManager():
-    def __init__(self, home, main_file_base):
-        self.home = home
-        self.main_file_base = main_file_base
-        self.ext = 'py' if constants.TESTING else 'exe'
-        self.main_file_name = self.main_file_base + '.' + self.ext
+def join(*parts):
+    return os.path.join(home, *parts)
 
-    def join(self, *parts):
-        return os.path.join(self.home, *parts)
+# TODO: make the following get functions more DRY than WET
 
-    @staticmethod
-    def get_file_index(name):
-        return int(name[:-len('.py')].split('_')[1]) if '_' in name else 0
+def get_str(location, name, default_value=''):
+    path = join(location, name)
+    try:
+        with open(path, 'r') as file:
+            return file.read()
 
-    @staticmethod
-    def get_script_directory():
-        """Retrieve location of currently executed script (not necessarily the same as current working directory)"""
+    except (FileNotFoundError, ValueError) as e:
+        # error-specific messages
+        if type(e) == FileNotFoundError:
+            print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+        elif type(e) == ValueError:
+            print("Someone changed the data.. it's invalid")
 
-        return os.path.dirname(os.path.abspath(__file__))
+        with open(path, 'w+') as file:
+            file.write(default_value)
+        return default_value
+
+def get_int(location, name, default_value=0):
+    path = join(location, name)
+    try:
+        with open(path, 'r') as file:
+            return int(file.read())
+
+    except (FileNotFoundError, ValueError) as e:
+        # error-specific messages
+        if type(e) == FileNotFoundError:
+            print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+        elif type(e) == ValueError:
+            print("Someone changed the data.. it's invalid")
+
+        with open(path, 'w+') as file:
+            file.write(str(default_value))
+        return default_value
+
+def get_bool(location, name, default_value=False):
+    path = join(location, name)
+    try:
+        with open(path, 'r') as file:
+            s = file.read().strip().lower()
+            if s == 'true':
+                return True
+            elif s == 'false':
+                return False
+            else:
+                raise ValueError('Not a boolean value (with manual conversion)')
+
+    except (FileNotFoundError, ValueError) as e:
+        # error-specific messages
+        if type(e) == FileNotFoundError:
+            print('Hmm... it looks like someone *deleted a file*! Who would DO THAT??')
+        elif type(e) == ValueError:
+            print("Someone changed the data.. it's invalid")
+
+        with open(path, 'w+') as file:
+            file.write(str(default_value))
+        return default_value
+
+def get_file_index(name):
+    return int(name[:-len('.py')].split('_')[1]) if '_' in name else 0
+
+def get_script_directory():
+    """Retrieve location of currently executed script"""
+
+    return os.path.dirname(os.path.abspath(__file__))
+
+home = get_script_directory()
