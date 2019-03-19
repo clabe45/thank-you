@@ -8,6 +8,7 @@ import constants
 import ai
 import nlg
 import file
+import data
 
 # what does the following line mean?
 # TODO: make other viruses from this virus
@@ -26,9 +27,10 @@ class Virus:
 
         self.name = name
         self.file_man = file.FileManager(home, main_file_base)    # file manager
-        self.text_gen = nlg.TextGenerator(self.file_man)
+        self.data_man = data.DataManager(self.file_man)     # data manager
+        self.text_gen = nlg.TextGenerator(self.data_man)
         # multiply by ten if they delete the original file
-        self.severity = self.file_man.get_int('severity.txt', 10 * 100)
+        self.severity = self.data_man.get_int('severity.txt', 10 * 100)
         # (static) Virus.actions was set by ai decorators; now apply them to instance so they can be used
         self.actions = {getattr(self, action.__name__): likelihood for action,likelihood in Virus.actions.items()}
 
@@ -38,7 +40,7 @@ class Virus:
         c = 0
         for e in os.listdir(self.file_man.home):
             if re.fullmatch(r'(%s_\d+\.py)|(.+\.txt)' % self.file_man.main_file_base, e) and e != self.file_man.main_file_name:
-                os.remove(e)
+                os.remove(self.file_man.join(e))    # prefix path with self.file_man.home, os the system will know where to look
                 c += 1
 
         return c
@@ -64,13 +66,15 @@ class Virus:
     def copy(self):
         """Clone this file lol"""
 
-        ext = 'py' if constants.TESTING else 'exe'
-        me = open('%s.%s' % (self.file_man.main_file_base, ext), 'r')
+        # prefix almost all paths with `self.file_man.home`, because that is our current working directory in practice
 
-        copy_indexes = [file.FileManager.get_file_index(e) for e in os.listdir(self.file_man.home) if os.path.isfile(e)]
+        ext = 'py' if constants.TESTING else 'exe'
+        me = open(self.file_man.join('%s.%s' % (self.file_man.main_file_base, ext)), 'r')
+
+        copy_indexes = [file.FileManager.get_file_index(e) for e in os.listdir(self.file_man.home) if os.path.isfile(self.file_man.join(e))]
         last_copy_index = max(copy_indexes)
         # choose 'thank-you_0.exe' or 'thank-you_0.py'
-        copy_name = '%s_%d.%s' % (self.file_man.main_file_base, last_copy_index+1, ext)
+        copy_name = self.file_man.join('%s_%d.%s' % (self.file_man.main_file_base, last_copy_index+1, ext))
         new_me = open(copy_name, 'w')
 
         new_me.write(me.read())
@@ -88,7 +92,7 @@ class Virus:
             file.write(msg)
 
     @ai.action(likelihood=1)
-    def say_hi(self, times=20):
+    def say_hi(self, times=7):
         for _ in range(times):
             print("Hi, my name's %s! What's yours?" % self.name)
 

@@ -4,10 +4,10 @@ import random
 import markovify
 
 class TextGenerator:
-    def __init__(self, file_man):
-        self.file_man = file_man
+    def __init__(self, data_man):
+        self.data_man = data_man
 
-        self.model = markovify.Text(file_man.get_str('sample_text.txt', 'You broke me.'))
+        self.model = markovify.Text(data_man.get_str('sample_text.txt', 'You broke me.'))
 
     def gen_message(self):
         """Generate note text"""
