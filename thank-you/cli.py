@@ -5,6 +5,8 @@ import constants
 import virus
 import data
 
+# add help output
+
 def start():
     check_agreement()
 
